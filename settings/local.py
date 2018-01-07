@@ -1,0 +1,2 @@
+USE_CUDA = False
+MAX_LENGTH = 10
