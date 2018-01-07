@@ -2,6 +2,7 @@ import argparse
 import random
 
 import time
+import torch
 from torch import optim, nn
 
 from app.input import read_lang, variables_from_pair
@@ -43,6 +44,7 @@ criterion = nn.NLLLoss()
 n_epochs = 50000
 plot_every = 200
 print_every = 1000
+save_every = 10000
 
 # Keep track of time elapsed and running averages
 start = time.time()
@@ -62,6 +64,10 @@ for epoch in range(1, n_epochs + 1):
     # Keep track of loss
     print_loss_total += loss
     plot_loss_total += loss
+
+    if epoch % save_every == 0:
+        torch.save(encoder.state_dict(), 'encoder_%d.model' % epoch)
+        torch.save(decoder.state_dict(), 'decoder_%d.model' % epoch)
 
     if epoch % print_every == 0:
         print_loss_avg = print_loss_total / print_every
