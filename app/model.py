@@ -69,7 +69,7 @@ class Attention(nn.Module):
             return self.other.dot(energy)
 
 class BahdanauDecoder(nn.Module):
-    def __init__(self, hidden_size, output_size, n_layers=1, dropout=.1):
+    def __init__(self, hidden_size, output_size, n_layers=1, dropout=.1, use_cuda=False):
         super().__init__()
 
         self.hidden_size = hidden_size
@@ -78,7 +78,7 @@ class BahdanauDecoder(nn.Module):
 
         self.embedding = nn.Embedding(output_size, hidden_size)
         self.dropout = nn.Dropout(dropout)
-        self.attention = Attention("concat", hidden_size)
+        self.attention = Attention("concat", hidden_size, use_cuda)
         self.gru = nn.GRU(hidden_size*2, hidden_size, n_layers, dropout=dropout)
         self.out = nn.Linear(hidden_size, output_size)
 
@@ -102,7 +102,7 @@ class BahdanauDecoder(nn.Module):
 
 class AttnDecoderRNN(nn.Module):
     def __init__(self, attn_model, hidden_size, output_size, n_layers=1,
-                 dropout_p=0.1):
+                 dropout_p=0.1, use_cuda=False):
         super().__init__()
 
         # Keep parameters for reference
@@ -120,7 +120,7 @@ class AttnDecoderRNN(nn.Module):
 
         # Choose attention model
         if attn_model != 'none':
-            self.attn = Attention(attn_model, hidden_size)
+            self.attn = Attention(attn_model, hidden_size, use_cuda)
 
     def forward(self, word_input, last_context, last_hidden, encoder_outputs):
         # Note: we run this one step at a time

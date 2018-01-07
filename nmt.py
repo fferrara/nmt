@@ -26,13 +26,13 @@ input_lang, output_lang, pairs = read_lang('fra', MAX_LENGTH)
 # Print an example pair
 print(random.choice(pairs))
 
-encoder = Encoder(input_lang.n_words, hidden_size, n_layers)
-decoder = AttnDecoderRNN(attn_model, hidden_size, output_lang.n_words, n_layers, dropout_p)
+encoder = Encoder(input_lang.n_words, hidden_size, n_layers, USE_CUDA)
+decoder = AttnDecoderRNN(attn_model, hidden_size, output_lang.n_words, n_layers, dropout_p, USE_CUDA)
 
 # Move models to GPU
 if USE_CUDA:
-    encoder.cuda()
-    decoder.cuda()
+    encoder = encoder.cuda()
+    decoder = decoder.cuda()
 
 learning_rate = 0.0001
 encoder_optimizer = optim.Adam(encoder.parameters(), lr=learning_rate)
@@ -42,7 +42,7 @@ criterion = nn.NLLLoss()
 # Configuring training
 n_epochs = 50000
 plot_every = 200
-print_every = 1000
+print_every = 1
 
 # Keep track of time elapsed and running averages
 start = time.time()
