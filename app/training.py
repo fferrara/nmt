@@ -40,7 +40,7 @@ def train(input_variable, target_variable,
         decoder_output, decoder_context, decoder_hidden, decoder_attention = \
             decoder(
                 decoder_input, decoder_context, decoder_hidden, encoder_outputs)
-        loss += criterion(decoder_output[0], target_variable[di])
+        loss += criterion(decoder_output, target_variable[di])
 
         if use_teacher_forcing:
             # Use the ground-truth target as the next input

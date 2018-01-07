@@ -42,7 +42,7 @@ criterion = nn.NLLLoss()
 # Configuring training
 n_epochs = 50000
 plot_every = 200
-print_every = 1
+print_every = 1000
 
 # Keep track of time elapsed and running averages
 start = time.time()
